@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text Sizes for Tablets -->
+    <dimen name="text_size_label">36sp</dimen>
+    <dimen name="text_size_note">26sp</dimen>
+    <dimen name="text_size_key">28sp</dimen>
+
+    <!-- Margins and Padding for Tablets -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">32dp</dimen>
+
+    <!-- Button & Layout Dimensions for Tablets -->
+    <dimen name="button_height">80dp</dimen>
+    <dimen name="button_height_land">56dp</dimen>
+    <dimen name="note_item_height">0dp</dimen>
+    <dimen name="layout_zero">0dp</dimen>
+</resources>
