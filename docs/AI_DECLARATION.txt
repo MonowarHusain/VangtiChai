@@ -5,11 +5,11 @@
 
 PROJECT DETAILS:
 ----------------
-Course: Mobile Application Development
+Course: CSE489 Mobile Application Development
 Application: VangtiChai (Single Page Change Calculator)
 Target Platform: Android 7.0+ (API 24+)
 Testing Device & Environment:
-  - Pixel 10 Pro XL (Medium Phone, Android API 37.0)
+  - Pixel 10 Pro XL, Medium Phone Android API 37.0
 
 ACKNOWLEDGEMENT & MODELS USED:
 -------------------------------
