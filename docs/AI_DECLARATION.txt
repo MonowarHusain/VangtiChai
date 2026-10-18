@@ -1,0 +1,108 @@
+﻿================================================================================
+                       AI USAGE DECLARATION & ACKNOWLEDGEMENT
+                                PROJECT: VANGTICHAI
+================================================================================
+
+PROJECT DETAILS:
+----------------
+Course: Mobile Application Development
+Application: VangtiChai (Single Page Change Calculator)
+Target Platform: Android 7.0+ (API 24+)
+Testing Device & Environment:
+  - Pixel 10 Pro XL (Medium Phone, Android API 37.0)
+
+ACKNOWLEDGEMENT & MODELS USED:
+-------------------------------
+1. External AI Consultation:
+   - Gemini 3.8 Flash & Gemini 3.1 Pro: Used for conceptual clarification, understanding 
+     assignment requirements, interpreting layout constraints, and designing prompt strategies.
+
+2. Android Studio Agent:
+   - Gemini 3.6 Flash (Studio Bot / Agent Mode): Used inside Android Studio for direct code 
+     generation, resource XML generation (dimens.xml, portrait & landscape activity_main.xml), 
+     and MainActivity implementation.
+
+================================================================================
+                  EXACT PROMPTS EXECUTED IN ANDROID STUDIO AGENT
+================================================================================
+
+PROMPT 1: FULL PROJECT GENERATION
+----------------------------------
+You are an expert Android developer. I need you to implement the entire "VangtiChai" app directly in this project by creating and updating all necessary files. Do not ask me to manually create any files—generate them directly.
+
+Follow these strict specifications:
+
+1. DIMENSIONS & STYLING (No Hardcoded Values):
+   Create res/values/dimens.xml:
+   - Define dimensions for text sizes (label size, note text size, key button text size).
+   - Define dimensions for padding and margins (small, medium, large).
+   - Define button dimensions or layout constraints.
+   - Ensure NO dimensions (dp/sp) are hardcoded in any layout file.
+
+2. PORTRAIT LAYOUT (res/layout/activity_main.xml):
+   Use androidx.constraintlayout.widget.ConstraintLayout:
+   - Top: A TextView (tvTaka) displaying "Taka: " or the accumulated amount.
+   - Left side: 8 TextViews arranged vertically in a single column for notes:
+     tv500 ("500: 0"), tv100 ("100: 0"), tv50 ("50: 0"), tv20 ("20: 0"), 
+     tv10 ("10: 0"), tv5 ("5: 0"), tv2 ("2: 0"), tv1 ("1: 0").
+   - Right side: A numeric keypad using standard Buttons arranged in a 3-column grid:
+     - Row 1: btn1, btn2, btn3
+     - Row 2: btn4, btn5, btn6
+     - Row 3: btn7, btn8, btn9
+     - Row 4: btn0 (column 1) and btnClear with text "CLEAR" (spanning columns 2 and 3).
+   - All text sizes, margins, and paddings must reference @dimen/...
+
+3. LANDSCAPE LAYOUT (res/layout-land/activity_main.xml):
+   Create res/layout-land/activity_main.xml using ConstraintLayout with the exact same IDs:
+   - Top: tvTaka.
+   - Left side: 2 columns of 4 notes:
+     - Column 1: tv500, tv100, tv50, tv20
+     - Column 2: tv10, tv5, tv2, tv1
+   - Right side: A 4-column numeric keypad:
+     - Row 1: btn1, btn2, btn3, btn4
+     - Row 2: btn5, btn6, btn7, btn8
+     - Row 3: btn9, btn0, and btnClear (spanning columns 3 and 4).
+   - All text sizes, margins, and paddings must reference @dimen/...
+
+4. TABLET OPTIMIZATION (res/values-sw600dp/dimens.xml):
+   Create res/values-sw600dp/dimens.xml with proportionally larger dimension values (e.g., larger sp for text, larger dp for margins) to ensure the UI renders cleanly on tablets like Nexus 10 without excessive whitespace.
+
+5. LOGIC & STATE PRESERVATION (MainActivity.kt):
+   Implement the logic in MainActivity.kt:
+   - Store the entered amount as a String (default "").
+   - Clicking digit buttons (btn0 to btn9) appends the tapped digit to the right (ignore a leading 0 if the string is empty).
+   - Clicking btnClear resets the amount to "".
+   - Implement change calculation:
+     - Update tvTaka with "Taka: " + amount (or just "Taka: " if empty).
+     - If empty or 0, set all note TextViews to "<denomination>: 0".
+     - If greater than 0, convert amount to Long and greedily compute the count for notes: 500, 100, 50, 20, 10, 5, 2, 1.
+     - Update each note TextView to "<denomination>: <count>".
+   - Persist state across screen rotation by overriding onSaveInstanceState and saving the current amount string, and restoring it in onCreate.
+
+Generate and apply all file creations and modifications now.
+
+
+PROMPT 2: UI LAYOUT & SIZING CORRECTIONS
+-----------------------------------------
+Fix the layout constraints and button sizing in both activity_main.xml and res/layout-land/activity_main.xml:
+
+1. FIX "Taka:" VISIBILITY:
+   - Make sure tvTaka is pinned to the top of the parent with an appropriate top margin (e.g., @dimen/margin_large).
+   - In both portrait and landscape layouts, ensure all note TextViews and all keypad Buttons are constrained below tvTaka (e.g., app:layout_constraintTop_toBottomOf="@id/tvTaka"). Neither the notes nor the keypad should overlap or push tvTaka off-screen.
+   - Initial text of tvTaka should be "Taka: " so it is always visible even when the amount is 0 or empty.
+
+2. FIX BUTTON SIZING (PORTRAIT):
+   - In dimens.xml, define button_height and button_width.
+   - Do NOT let buttons stretch across the entire screen height.
+   - The keypad should be placed in the right half of the screen, vertically centered or positioned below tvTaka.
+   - Rows should be tightly spaced using margin_small between rows and columns.
+   - btnClear should span the width of columns 2 and 3 on the 4th row, keeping the same fixed height as the other buttons.
+
+3. FIX NOTES SPACING (PORTRAIT):
+   - Vertically chain or space the 8 note TextViews (tv500 down to tv1) evenly along the left side, aligned with the height of the keypad area.
+
+4. FIX LANDSCAPE LAYOUT (res/layout-land/activity_main.xml):
+   - Set button heights in landscape to a compact size so the 3-row keypad fits comfortably without vertical stretching.
+   - Ensure tvTaka stays at the top center, and both the 2-column note list and the 4-column keypad are constrained below tvTaka.
+
+Update dimens.xml, res/layout/activity_main.xml, and res/layout-land/activity_main.xml directly now.
