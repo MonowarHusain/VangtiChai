@@ -13,14 +13,15 @@ Testing Device & Environment:
 
 ACKNOWLEDGEMENT & MODELS USED:
 -------------------------------
-1. External AI Consultation:
-   - Gemini 3.8 Flash & Gemini 3.1 Pro: Used for conceptual clarification, understanding 
-     assignment requirements, interpreting layout constraints, and designing prompt strategies.
+1. Initial Conception, Understanding & Prompt Engineering:
+   - Gemini 3.8 Flash & Gemini 3.1 Pro: Used initially to analyze and understand the assignment 
+     requirements, layout constraints, activity lifecycle edge-cases, and to formulate 
+     structured master prompts for development.
 
-2. Android Studio Agent:
-   - Gemini 3.6 Flash (Studio Bot / Agent Mode): Used inside Android Studio for direct code 
-     generation, resource XML generation (dimens.xml, portrait & landscape activity_main.xml), 
-     and MainActivity implementation.
+2. Android Studio Agent (Direct Implementation & Troubleshooting):
+   - Gemini 3.6 Flash (Studio Bot / Agent Mode): Used directly inside Android Studio for 
+     generating XML layouts, dimensions, MainActivity logic, debugging layout issues, and 
+     resolving emulator connection timeouts.
 
 ================================================================================
                   EXACT PROMPTS EXECUTED IN ANDROID STUDIO AGENT
@@ -106,3 +107,47 @@ Fix the layout constraints and button sizing in both activity_main.xml and res/l
    - Ensure tvTaka stays at the top center, and both the 2-column note list and the 4-column keypad are constrained below tvTaka.
 
 Update dimens.xml, res/layout/activity_main.xml, and res/layout-land/activity_main.xml directly now.
+
+
+PROMPT 3: ADB & EMULATOR CONNECTION DIAGNOSTICS
+------------------------------------------------
+The Android Studio emulator is failing to connect with the error: "Emulator failed to connect within 5 minutes".
+Help me diagnose and fix this environment and project setup directly:
+1.
+ADB & CONNECTION TROUBLESHOOTING:
+- Run or suggest terminal diagnostic commands to reset ADB (adb kill-server, adb start-server, adb devices).
+- Check if there are orphaned qemu/emulator processes blocking port 5554/5555 and provide the terminal command to terminate them.
+- Advise on adjusting the ADB connection timeout setting in Android Studio properties (adb.connection.timeout=300 or higher).
+2.
+PROJECT SDK & BUILD VERIFICATION:
+- Check app/build.gradle.kts (or build.gradle) to ensure compileSdk, targetSdk, and minSdk match installed platform SDKs without experimental/unsupported SDK versions (e.g. ensure minSdk is 21 and compileSdk/targetSdk are set to a stable version like 34).
+- Ensure dependencies (ConstraintLayout, core-ktx, appcompat) sync cleanly without broken Gradle daemon tasks.
+3.
+PHYSICAL DEVICE ALTERNATIVE:
+- If the emulator continues to time out due to system virtualization or GPU rendering failure, provide the exact ADB command to verify if a USB-connected Android phone is detected.
+
+
+PROMPT 4: TERMINATING PROCESSES & COMPREHENSIVE RECOVERY
+---------------------------------------------------------
+The Android virtual emulator is failing to launch or connect ("Emulator failed to connect within 5 minutes"), and the app layout needs urgent fixes for "Taka:" visibility and button dimensions. Act as my Android engineer and execute the following fixes:
+1.
+TERMINATE HUNG PROCESSES & RESET ADB:
+- Provide and execute terminal commands to kill all stale emulator and QEMU instances (killall -9 qemu-system-x86_64 on Linux/macOS or taskkill /F /IM qemu-system-x86_64.exe on Windows).
+- Reset the adb daemon: adb kill-server && adb start-server.
+- List connected devices to confirm ADB port accessibility: adb devices.
+2.
+VERIFY BUILD & SDK COMPATIBILITY:
+- Check app/build.gradle.kts (or build.gradle).
+- If compileSdk or targetSdk is set to 37 or any preview version, lower it to stable compileSdk = 34 and targetSdk = 34.
+- Keep minSdk = 21 as required by the assignment.
+- Run a Gradle sync to verify there are no broken dependencies blocking deployment.
+3.
+FIX THE LAYOUT ISSUES (PORTRAIT & LANDSCAPE):
+- In res/layout/activity_main.xml and res/layout-land/activity_main.xml:
+  - Ensure tvTaka is placed at the top with text "Taka: " so it is always visible.
+  - Constrain all keypad buttons and note TextViews strictly below tvTaka (app:layout_constraintTop_toBottomOf="@id/tvTaka"). Do not allow child views to push tvTaka off-screen or cover it.
+  - In res/values/dimens.xml, set a fixed button height (e.g., button_height = 54dp for portrait, 40dp for landscape) instead of 0dp so buttons do not stretch vertically across the full display.
+  - Keep keypad buttons tightly grouped with small margins.
+4.
+EMULATOR STARTUP COMMAND (BYPASS GUI HANG):
+- Provide the exact terminal command to start the newly installed AVD via command line with software rendering enabled (e.g. emulator -avd <avd_name> -gpu swiftshader_indirect -no-snapshot-load).
